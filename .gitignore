@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.env
+.env.*
+.cache/
+
+# Node
+node_modules/
+.next/
+dist/
+build/
+
+# macOS
+.DS_Store
+
+# Local data
+uploaded_files/*
+!uploaded_files/.gitkeep
+backend/data/*.db
+
+# UV / pip
+.uv/
+pip-wheel-metadata/

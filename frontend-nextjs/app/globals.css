@@ -1,0 +1,13 @@
+:root { --bg: #0b0b0b; --fg: #eaeaea; --muted: #9aa0a6; --accent: #5e5ce6; }
+html, body { background: var(--bg); color: var(--fg); margin:0; font-family: -apple-system, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+a { color: var(--accent); }
+.container { max-width: 880px; margin: 2rem auto; padding: 0 1rem; }
+.panel { background: #121212; border: 1px solid #222; border-radius: 14px; padding: 16px; }
+.input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #333; background:#0e0e0e; color:var(--fg); }
+.button { background: var(--fg); color: #000; padding: 10px 16px; border-radius: 12px; border: none; cursor: pointer; }
+.row { display: flex; gap: 12px; align-items: center; }
+.badge { padding: 6px 10px; border-radius: 999px; background: #1a1a1a; border: 1px solid #2a2a2a; color: var(--muted); font-size: 12px; }
+.chat { display: flex; flex-direction: column; gap: 12px; }
+.bubble { padding: 12px 14px; border-radius: 14px; max-width: 80%; }
+.bubble.user { background: #1a1a1a; align-self: flex-end; }
+.bubble.assistant { background: #141414; border: 1px solid #222; align-self: flex-start; }
