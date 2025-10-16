@@ -1,4 +1,4 @@
-const BASE = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+const BASE = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8050";
 
 export type Message = { role: "system" | "user" | "assistant"; content: string };
 

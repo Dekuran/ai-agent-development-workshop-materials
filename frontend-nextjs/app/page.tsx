@@ -16,7 +16,7 @@ export default function Page() {
   return (
     <div className="container">
       <h1 style={{fontWeight:600}}>🤖 Multi-Agent Workshop (Next.js)</h1>
-      <p style={{color:"#9aa0a6"}}>Backend: {process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000"}</p>
+      <p style={{color:"#9aa0a6"}}>Backend: {process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8050"}</p>
       <ProviderSelector onChange={(p,v,sp) => setAgent(p,v,sp)} />
       <FileUpload />
       <Chat />

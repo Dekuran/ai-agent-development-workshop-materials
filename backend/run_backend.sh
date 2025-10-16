@@ -9,7 +9,7 @@ if [ -f "../.env" ]; then
 fi
 # Run via uv if available for consistent env
 if command -v uv >/dev/null 2>&1; then
-  uv run uvicorn app.main:app --reload --host "${BACKEND_HOST:-127.0.0.1}" --port "${BACKEND_PORT:-8000}"
+  uv run python -m uvicorn app.main:app --reload --host "${BACKEND_HOST:-127.0.0.1}" --port "${BACKEND_PORT:-8050}"
 else
-  uvicorn app.main:app --reload --host "${BACKEND_HOST:-127.0.0.1}" --port "${BACKEND_PORT:-8000}"
+  python -m uvicorn app.main:app --reload --host "${BACKEND_HOST:-127.0.0.1}" --port "${BACKEND_PORT:-8050}"
 fi

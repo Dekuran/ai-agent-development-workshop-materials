@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Multi-Agent AI Workshop Scaffold
 
 Hands-on workshop comparing multiple LLM providers and orchestration frameworks with a FastAPI backend and two frontends (Streamlit prototype-first, Next.js optional).
@@ -24,8 +23,8 @@ Hands-on workshop comparing multiple LLM providers and orchestration frameworks 
 
 4) Run backend
    ./backend/run_backend.sh
-   API: http://localhost:8000
-   Docs: http://localhost:8000/docs
+   API: http://localhost:8050
+   Docs: http://localhost:8050/docs
 
 5) Streamlit UI (primary)
    cd frontend-streamlit
@@ -58,7 +57,3 @@ See backend/README.md for details.
 - Streamlit is ideal for workshops and rapid prototyping.
 - Next.js is better for product-grade UX and deployment (e.g., Vercel).
 
-=======
-# ai-agent-development-workshop-materials
-Materials for a code-along workshop on AI agent development. To be further developed with additional models and functions.
->>>>>>> d016bc1725f965d73c13f8e12750c4c8cdcc1961

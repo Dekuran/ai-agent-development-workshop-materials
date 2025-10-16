@@ -8,6 +8,7 @@ import json
 from .search_tool import SearchTool
 from .file_reader import FileReader
 from .sqlite_tool import SQLiteTool
+from .file_finder import FileFinder
 
 
 @dataclass
@@ -119,38 +120,45 @@ class ToolRegistry:
         # web_search
         self._register(ToolSpec(
             name="web_search",
-            description="Search the web for up-to-date information using DuckDuckGo.",
+            description=("Use this tool to search the public web (DuckDuckGo) for fresh, up-to-date information. "
+                         "When to use: when the user asks for current events, facts you are unsure about, or external links. "
+                         "How to call: web_search({\"query\": \"concise search terms\", \"max_results\": 3}). "
+                         "Arguments: query (required): short keywords; you may add operators like site:example.com. "
+                         "max_results (optional int 1–10, default 3). "
+                         "Return: a list of strings in the form 'Title — URL — Snippet'."),
             parameters={
                 "type": "object",
                 "properties": {
-                    "query": {"type": "string", "description": "Search query"},
+                    "query": {"type": "string", "description": "Required. Concise search query (you may include operators like site:example.com)."},
                     "max_results": {
                         "type": "integer",
                         "minimum": 1,
                         "maximum": 10,
                         "default": 3,
-                        "description": "Maximum number of results to return (1-10)"
+                        "description": "Optional. Number of results to return (1–10). Default is 3."
                     },
                 },
                 "required": ["query"],
                 "additionalProperties": False,
             },
-            executor=lambda args: "\n".join(
-                SearchTool().search(
-                    args.get("query", ""),
-                    int(args.get("max_results", 3))
-                )
+            executor=lambda args: SearchTool().search(
+                args.get("query", ""),
+                int(args.get("max_results", 3))
             )
         ))
 
         # file_read
         self._register(ToolSpec(
             name="file_read",
-            description="Read the contents of a file previously uploaded to the uploaded_files/ directory.",
+            description=("Read the contents of a user-uploaded file from uploaded_files/. "
+                         "Recommended flow: 1) Call file_finder({}) to list valid filenames; "
+                         "2) Choose one filename; 3) Call file_read({\"path\": \"<filename>\"}). "
+                         "Arguments: path (required): the exact filename as listed by file_finder (no directories). "
+                         "Return: the text content of the file; large/binary documents may be extracted to text."),
             parameters={
                 "type": "object",
                 "properties": {
-                    "path": {"type": "string", "description": "Relative path/filename within uploaded_files/"},
+                    "path": {"type": "string", "description": "Required. Exact filename within uploaded_files/, e.g. 'report.pdf' (no directories)."},
                 },
                 "required": ["path"],
                 "additionalProperties": False,
@@ -161,16 +169,54 @@ class ToolRegistry:
         # sqlite_query
         self._register(ToolSpec(
             name="sqlite_query",
-            description="Execute a read-only SQL SELECT query against the workshop SQLite database.",
+            description=("Execute a read-only SQL SELECT (or PRAGMA) query against the workshop SQLite database. "
+                         "Do not modify data with this tool. "
+                         "How to call: sqlite_query({\"sql\": \"SELECT ...\"}). "
+                         "Return: the query results serialized to text/JSON."),
             parameters={
                 "type": "object",
                 "properties": {
-                    "sql": {"type": "string", "description": "A SELECT ... query"},
+                    "sql": {"type": "string", "description": "Required. Single-statement SQL starting with SELECT or PRAGMA."},
                 },
                 "required": ["sql"],
                 "additionalProperties": False,
             },
             executor=lambda args: SQLiteTool().query(args.get("sql", "SELECT 1"))
+        ))
+
+        # file_finder
+        self._register(ToolSpec(
+            name="file_finder",
+            description=("List the available filenames in uploaded_files/. "
+                         "Use this before file_read to discover valid filenames. "
+                         "How to call: file_finder({}). "
+                         "Return: a list of filenames (strings)."),
+            parameters={
+                "type": "object",
+                "properties": {},
+                "required": [],
+                "additionalProperties": False,
+            },
+            executor=lambda args: FileFinder().search()
+        ))
+
+        # sqlite_execute
+        self._register(ToolSpec(
+            name="sqlite_execute",
+            description=("Execute a write operation (INSERT/UPDATE/DELETE/etc.) against the SQLite database. "
+                         "Only call this with explicit user permission and after validating the SQL. "
+                         "How to call: sqlite_execute({\"sql\": \"UPDATE ...\"}). "
+                         "Return: affected row count or last inserted row id."),
+            parameters={
+                "type": "object",
+                "properties": {
+                    "sql": {"type": "string", "description": "Required. Single-statement non-SELECT SQL (e.g., INSERT, UPDATE, DELETE)."},
+                },
+                "required": ["sql"],
+                "additionalProperties": False,
+            },
+            # Note: SQLiteTool currently exposes exeucte(); we call that for compatibility.
+            executor=lambda args: SQLiteTool().exeucte(args.get("sql", ""))
         ))
 
 
